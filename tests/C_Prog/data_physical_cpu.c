@@ -41,8 +41,8 @@ int convert_to_physical(int nopc){
     ssize_t read;
     float* tab_data_physical;
 
-	file_data_logical = fopen ("plot/data_logical.dat", "r+");
-	file_data_physical = fopen("plot/data_physical.dat", "w+");
+	file_data_logical = fopen ("../plot/data_logical.dat", "r+");
+	file_data_physical = fopen("../plot/data_physical.dat", "w+");
 
 	if(file_data_logical == NULL || file_data_logical == NULL){
 		fprintf(stderr, "convert_to_physical: open file data error!\n");
@@ -95,6 +95,8 @@ int convert_to_physical(int nopc){
 		free(line);
 	fclose(file_data_logical);
 	fclose(file_data_physical);
+	if (tab_data_physical)
+		free(tab_data_physical);
 	free(tab_data);
 	return 0;
 }
