@@ -42,3 +42,17 @@ plot the physical/logical cpu's data
   load 'plot_core_logic.p'
   load 'plot_core_physic.p'
 ```
+
+copy file from the server to your machine using sftp
+```
+$ sftp user_name@server_name
+Connected to server_name
+sftp> dir
+file1 file2 file3
+sftp> pwd
+Remot worjing directory: /home/etis/tests
+sftp> get file2
+Fetching /home/etis/tests/file2 to file2
+/home/etis/tests/file2
+sftp> bye
+```
