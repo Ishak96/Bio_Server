@@ -34,8 +34,7 @@ float* table_convert(int nopc, float* tab_data_logical){
 int convert_to_physical(int nopc){
 	FILE* file_data_logical;
 	FILE* file_data_physical;
-	int time;
-	float all;
+	float time, all;
 	char * line = NULL;
     size_t len = 0;
     ssize_t read;
@@ -60,34 +59,24 @@ int convert_to_physical(int nopc){
 		return FUNC_ERROR;
 	}
 
-	fprintf(file_data_physical, "t CORE[ALL] ");
+	fprintf(file_data_physical, "t cpu ");
 	for(int i = 0; i < nopc; i++){
-		if(i < nopc - 1)
-			fprintf(file_data_physical, "CORE[%d] ", i);
-		else
-			fprintf(file_data_physical, "CORE[%d]\n", i);
+		fprintf(file_data_physical, "cpu%d ", i);
 	}
 	
 	while((read = getline(&line, &len, file_data_logical)) != -1){
-		fscanf(file_data_logical, "%d %f ", &time, &all);
-		fprintf(file_data_physical, "%d %.2f ", time, all);
+		fscanf(file_data_logical, "\n%f %f ", &time, &all);
+		fprintf(file_data_physical, "\n%f %f ", time, all);
 		
 		for(int i = 0; i < nopc * 2; i++){
-	    	if(i < (nopc * 2) - 1){
+			if(i < (nopc * 2) -1)
 	    		fscanf(file_data_logical, "%f ", tab_data+i);
-	    	}
-	    	else{
-	    		fscanf(file_data_logical, "%f ", tab_data+i);
-	    	}
+	    	else
+	    		fscanf(file_data_logical, "%f", tab_data+i);
 	    }
 	    tab_data_physical = table_convert(nopc, tab_data);
 	    for (int i = 0; i < nopc; i++){
-	    	if(i < nopc - 1){
-	    		fprintf(file_data_physical, "%.2f ", tab_data_physical[i]);
-	    	}
-	    	else{
-	    		fprintf(file_data_physical, "%.2f\n", tab_data_physical[i]);
-	    	}
+	    	fprintf(file_data_physical, "%f ", tab_data_physical[i]);
 	    }
 	}
 
