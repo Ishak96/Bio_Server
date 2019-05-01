@@ -78,7 +78,7 @@ char* get_new_file_name(int noc, char* old_file_name, char** cpus){
 		len += strlen(cpus[i]);
 	}
 
-	new_file_name = malloc( sizeof(char) * len );
+	new_file_name = malloc( sizeof(char) * (len + noc + 2) );
 	strcpy(new_file_name, "..");
 
 	char delim[2] = ".";
@@ -116,6 +116,8 @@ int creat_new_data_file(char* old_file_name, int* tab_index, int noc, char** cpu
 	char * line = NULL;
     size_t len = 0;
     ssize_t read;
+    char* buff1;
+    char* buff2;
 
 	if( (old_file_name == NULL) || (tab_index == NULL) ){
 		fprintf(stderr, "creat_new_data_file: invalid argument!\n");
@@ -154,8 +156,31 @@ int creat_new_data_file(char* old_file_name, int* tab_index, int noc, char** cpu
 		fprintf(new_data_file, "\n");
 	}
 
+	char del[2] = "/";
+	char* tok = strtok(new_file_name, del);
+	char* file;
+	while(tok != NULL) {
+		file = tok;
+		tok = strtok(NULL, del);
+	}
+
+	buff1 = malloc( sizeof(char) * (42 + 1 + 2));
+	buff2 = malloc ( sizeof(char) * (42 + 4 + strlen(file)));
+
+	sprintf(buff1, "sed -i -e 's/N/%d/g' ../plot/plot_selected.p", noc + 1);
+	sprintf(buff2, "sed -i -e 's/file/%s/g' ../plot/plot_selected.p", file);
+
+	if( (system(buff1) < 0) || (system(buff2) < 0) ){
+		fprintf(stderr, "creat_new_data_file: system call!\n");
+		return FUNC_ERROR;
+	}
+
 	if(line)
 		free(line);
+	if(buff1)
+		free(buff1);
+	if(buff2)
+		free(buff2);
 	fclose(old_data_file);
 	fclose(new_data_file);
 	return 0;
