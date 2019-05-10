@@ -34,35 +34,35 @@ Enter your app: [app] [mode] [apply] [repeat] [interval]: ...
 ```
 #### app
 1. dd : "dd if=/dev/zero of=/dev/null"
- ⋅⋅* /dev/zero provides an endless stream of zero bytes when read. This function is provided by the kernel and does not require allocating memory. All writes to /dev/null are dropped silently.
- ..* Duplicate data (dd) from input file (if) of /dev/zero (virtual limitless supply of 0's) into output file (of) of /dev/null (virtual sinkhole) using blocks of 500M size (bs = block size) and repeat this (count) just once (1)
+	* /dev/zero provides an endless stream of zero bytes when read. This function is provided by the kernel and does not require allocating memory. All writes to /dev/null are dropped silently.
+	* Duplicate data (dd) from input file (if) of /dev/zero (virtual limitless supply of 0's) into output file (of) of /dev/null (virtual sinkhole) using blocks of 500M size (bs = block size) and repeat this (count) just once (1)
 2. rand : "while true; do echo $((13**99)) 1> /dev/urandom 2>&1; done"
- ..* 100% load on a Linux machine.
- ..* Via a while ( un ou plusieurs CPU ).
+	* 100% load on a Linux machine.
+	* Via a while ( un ou plusieurs CPU ).
 3. one_full : "while true; do true; done"
- ..* Via a while usage of 50% of the cpu
+	* Via a while usage of 50% of the cpu
 4. cat : "cat /dev/urandom > /dev/null"
- ..* Via a cat command.
- ..* While there are your normal, printable ASCII characters that are sent back and forth on a terminal, there are also many unprintable characters that are used for the system to communicate with the terminal. For example, if a program sends the character 0x07 ("ASCII Bell character"), your terminal should beep.
+	* Via a cat command.
+	* While there are your normal, printable ASCII characters that are sent back and forth on a terminal, there are also many unprintable characters that are used for the system to communicate with the terminal. For example, if a program sends the character 0x07 ("ASCII Bell character"), your terminal should beep.
 
-to get the physical cpu's usage
+#### to get the physical cpu's usage
 ```
 	gcc C_Prog/data_physical_cpu.c -o data_physical_cpu
   ./data_physical_cpu <number of pysical cpu's
 ```
 
-how to install gnuplot
+#### how to install gnuplot
 ```
   $ sudo apt-get install gnuplot
 ```
 
-plot the physical/logical cpu's data
+#### plot the physical/logical cpu's data
 ```
   load 'plot_core_logic.p'
   load 'plot_core_physic.p'
 ```
 
-copy file from the server to your machine using sftp
+#### copy file from the server to your machine using sftp
 ```
 $ sftp user_name@server_name
 Connected to server_name
