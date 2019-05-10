@@ -3,11 +3,6 @@
 quit=0
 help=1
 
-dd="dd if=/dev/zero of=/dev/null"
-rand="while true; do echo $((13**99)) 1> /dev/null 2>&1; done"
-one_full="while true; do true; done"
-cat="cat /dev/urandom > /dev/null"
-
 arr_dd=()
 arr_rand=()
 arr_one_full=()
@@ -23,7 +18,7 @@ function run_proc {
 				while [ $i -lt $3 ]
 				  do
 				  	sleep $4
-				  	$dd &
+				  	dd if=/dev/zero of=/dev/null &
 				  	pid=$(echo $!)
 				  	arr_dd+=("$pid")
 				  	i=$(($i + 1))
@@ -32,7 +27,7 @@ function run_proc {
 				while [ $i -lt $3 ]
 				  do
 				  	sleep $4
-				  	$rand &
+				  	while true; do echo $((13**99)) 1> /dev/null 2>&1; done &
 				  	pid=$(echo $!)
 				  	arr_rand+=("$pid")
 				  	i=$(($i + 1))
@@ -41,7 +36,7 @@ function run_proc {
 				while [ $i -lt $3 ]
 				  do
 				  	sleep $4
-				  	$one_full &
+				  	while true; do true; done &
 				  	pid=$(echo $!)
 				  	arr_one_full+=("$pid")
 				  	i=$(($i + 1))
@@ -50,7 +45,7 @@ function run_proc {
 				while [ $i -lt $3 ]
 				  do
 				  	sleep $4
-				  	$cat &
+				  	cat /dev/urandom > /dev/null &
 				  	pid=$(echo $!)
 				  	arr_cat+=("$pid")
 				  	i=$(($i + 1))
