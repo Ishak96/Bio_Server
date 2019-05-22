@@ -4,7 +4,9 @@ set yrange [0:150]
 set xlabel "time (s)" font "Helvetica, 12"
 set ylabel "% usage of cores" font "Helvetica, 12"
 set title "CPU usage of the different physical cores" font "Helvetica, 15"
-do for [i=1:N] {
+set terminal png size 3000,1500;
+set output 'core_dioxine_cpu31.png'
+do for [i=1:2] {
     set style line i linewidth 3
 }
-plot for[n=2:N] 'file' u 1:n with lines
+plot for[n=2:2] 'data_physical_cpu31.dat' u 1:n with lines
