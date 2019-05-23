@@ -2,18 +2,18 @@
 
 quit=0
 help=1
-number_core_physical=32
+number_core_physical=$1
 
 function disable_enable {
-	com="/sys/devices/system/cpu/cpu$1/online"
-	echo $2 | sudo tee com
+	com="/sys/devices/system/cpu/cpu$2/online"
+	echo $1 | sudo tee $com
 }
 
 function on_cpu {
 	case $1 in
 		begin )
 			i=$2
-			while [ $i -le 31 ]; do
+			while [ $i -le $(($number_core_physical - 1)) ]; do
 				core_physical=$(($i + $number_core_physical))
 				disable_enable 1 $i
 				disable_enable 1 $core_physical
@@ -21,7 +21,7 @@ function on_cpu {
 			done
 		;;
 		end )
-			i=$((31 - $2))
+			i=$(($(($number_core_physical - 1)) - $2))
 			while [ $i -ge 0 ]; do
 				core_physical=$(($i + $number_core_physical))
 				disable_enable 1 $i
@@ -37,7 +37,7 @@ function off_cpu {
 	case $1 in
 		begin ) 
 			i=$2
-			while [ $i -le 31 ]; do
+			while [ $i -le $(($number_core_physical - 1)) ]; do
 				core_physical=$(($i + $number_core_physical))
 				disable_enable 0 $i
 				disable_enable 0 $core_physical
@@ -45,7 +45,7 @@ function off_cpu {
 			done
 		;;
 		end ) 
-			i=$((31 - $2))
+			i=$(($(($number_core_physical - 1)) - $2))
 			while [ $i -ge 0 ]; do
 				core_physical=$(($i + $number_core_physical))
 				disable_enable 0 $i
@@ -72,6 +72,10 @@ while [ $quit -eq 0 ]
 		help ) help=1 ;;
 		on ) on_cpu $mode $number;;
 		off ) off_cpu $mode $number;;
+		cpu ) 
+			CPU=$(cat /proc/cpuinfo | grep "processor")
+			echo $CPU
+		;;
 		* ) help=1 ;;
 	esac
  done
