@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 sleepDurationSeconds=$1
 numberOfsnap=$2
