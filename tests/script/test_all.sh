@@ -8,4 +8,4 @@ repeat=3000
 ./app_manager.sh
 
 cut -d' ' -f2 ../plot/data_logical.dat | paste -d' ' ../plot/power_consumption.dat - > ../plot/xyz.dat
-awk '{print $3,$2}' xyz.dat > cpu_usage_power.data
+awk '{print $3,$2}' ../plot/xyz.dat > ../plot/cpu_usage_power.data

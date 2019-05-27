@@ -5,7 +5,7 @@ set xlabel "time (s)" font "Helvetica, 12"
 set ylabel "% usage of cores" font "Helvetica, 12"
 set title "CPU usage of the different physical cores" font "Helvetica, 15"
 set terminal png size 3000,1500;
-set output 'core_physic_glyphosate.png'
+set output 'core_physic_dioxine.png'
 # number of physical cores + 2
 do for [i=1:10] {
     set style line i linewidth 3
