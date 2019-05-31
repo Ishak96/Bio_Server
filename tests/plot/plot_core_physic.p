@@ -1,6 +1,10 @@
 set key autotitle columnhead
-set xrange [0:3500]
+set xrange [0:2900]
 set yrange [0:150]
+set tics font ", 20"
+set key font ",20"
+set ytics 10
+set xtics 100
 set xlabel "time (s)" font "Helvetica, 12"
 set ylabel "% usage of cores" font "Helvetica, 12"
 set title "CPU usage of the different physical cores" font "Helvetica, 15"
