@@ -30,7 +30,7 @@ char* get_new_file_name(int noc, char* old_file_name){
 	return new_file_name;
 }
 
-int calculate_avrage(int noc, char* old_file_name){
+int calculate_avrage(int noc, char* old_file_name, char* type){
 	FILE* old_data_file;
 	FILE* new_data_file;
 	char * line = NULL;
@@ -38,7 +38,7 @@ int calculate_avrage(int noc, char* old_file_name){
     ssize_t read;
     float time, all;
 
-	if( old_file_name == NULL ){
+	if( old_file_name == NULL || type == NULL ){
 		fprintf(stderr, "calculate_avrage: invalid argument!\n");
 		return FUNC_ERROR;
 	}
@@ -63,23 +63,27 @@ int calculate_avrage(int noc, char* old_file_name){
 	}
 	
 	char delim[2] = " ";
+
+	fprintf(new_data_file, "t %s(%d) \n", type, noc);
 	while((read = getline(&line, &len, old_data_file)) != -1){
 		int index = 0;
 		
-		char* tok = strtok(line, delim);
-		while( tok != NULL ) {
-			if( strcmp(tok, "\n") && index < 2){
-				if(index == 1 && strcmp(tok, "cpu")){
-					fprintf(new_data_file, "%f ", atof(tok) / noc);
+		if ( strcmp(line, "t cpu \n") && strcmp(line, "t power \n") ){
+			char* tok = strtok(line, delim);
+			while( tok != NULL ) {
+				if( strcmp(tok, "\n") && index < 2){
+					if(index == 1 && strcmp(tok, "cpu")){
+						fprintf(new_data_file, "%f ", atof(tok) / noc);
+					}
+					else{
+						fprintf(new_data_file, "%s ", tok);
+					}
 				}
-				else{
-					fprintf(new_data_file, "%s ", tok);
-				}
+				tok = strtok(NULL, delim);
+				index++;
 			}
-			tok = strtok(NULL, delim);
-			index++;
+			fprintf(new_data_file, "\n");	
 		}
-		fprintf(new_data_file, "\n");
 	}
 
 	if (line)
@@ -92,13 +96,13 @@ int calculate_avrage(int noc, char* old_file_name){
 
 int main(int argc, char** argv){
 
-	if(argc < 2){
+	if(argc < 3){
 		fprintf(stderr, "main: invalid argument!\n");
-		printf("usage: %s [data_file] [number of cpu] ..\n", argv[0]);
+		printf("usage: %s [data_file] [number of cpu] [cpu | power] ..\n", argv[0]);
 		return FUNC_ERROR;
 	}
 
-	if(strcmp(argv[1], "../plot/data_physical_cpu.dat") && strcmp(argv[1], "../plot/data_logical_cpu.dat")){
+	if(strcmp(argv[1], "../plot/data_physical_cpu.dat") && strcmp(argv[1], "../plot/data_logical_cpu.dat") && strcmp(argv[1], "../plot/power_consumption.dat")){
 		fprintf(stderr, "main: invalid data file!\n");
 		printf("usage: %s [data_file] [number of cpu] ..\n", argv[0]);
 		return FUNC_ERROR;
@@ -106,12 +110,12 @@ int main(int argc, char** argv){
 
 	char* file = argv[1];
 	int number_of_cpu = atoi(argv[2]);
+	char* type = argv[3];
 
-	if(calculate_avrage(number_of_cpu, file) < 0){
+	if(calculate_avrage(number_of_cpu, file, type) < 0){
 		fprintf(stderr, "main: calculate_avrage!\n");
 		return FUNC_ERROR;		
 	}
-
 
 	return 0;
 }
