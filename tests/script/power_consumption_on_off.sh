@@ -1,8 +1,8 @@
 #!/bin/bash
 
 sleepDurationSeconds=2
-numberOfsnap=275
-number_core_physical=8
+numberOfsnap=3750
+number_core_physical=32
 
 zero=0
 
@@ -104,7 +104,7 @@ function c_u_p_c(){
 	done
 }
 
-for i in 0 1 3 6 10
+for (( i=$1; i<=$2; i+=$3 ))
 do
 	currentDate=$(date "+%H:%M:%S")
 	echo  "---- $currentDate ----" > ../plot/c_u_p_c"$i".dat
@@ -116,19 +116,19 @@ do
 
 	run_app $i
 
-	for j in 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+	for (( j=1; j<=62; j++ ))	
 	do
-		if [ $j -le 7 ]; then
+		if [ $j -le 31 ]; then
 			core_physical=$(($j + $number_core_physical))
 			disable_enable 0 $j
 			disable_enable 0 $core_physical
-			sleep 30
+			sleep 120
 		else
-			activate=$(($j - 7))
+			activate=$(($j - 31))
 			core_physical=$(($activate + $number_core_physical))
 			disable_enable 1 $activate
 			disable_enable 1 $core_physical
-			sleep 30
+			sleep 120
 		fi
 	done 
 

@@ -123,6 +123,8 @@ function c_u_p_c(){
 
 c_u_p_c $interval $repeat &
 
+sleep 60
+
 run_app $app_repeat $app_interval
 
 sleep 300
