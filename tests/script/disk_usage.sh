@@ -34,7 +34,7 @@ function d_u(){
 		do
 			d_tmp=$(echo "$disk" | cut -d'/' -f3)
 
-			usage_d=$(df --total -hl | sed -e "s/  */ /g" | grep "$d_tmp" | cut -d' ' -f5)
+			usage_d=$(df --total -hl | sed -e "s/  */ /g" | grep "$d_tmp" | cut -d' ' -f5 | cut -d'%' -f1)
 			
 			data_disk="$data_disk $usage_d"
 		done
