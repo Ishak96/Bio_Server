@@ -3,7 +3,7 @@ interval=1
 repeat=20
 zero=0
 
-disks=$(df -H | grep -vE '^Filesystem|tmpfs|cdrom|mmcblk0p1' | sed -e "s/  */ /g" | cut -d' ' -f1 | grep -v 'Sys')
+disks=$(lsblk -io KNAME,TYPE | grep 'disk\|part'| sed -e "s/  */ /g" | cut -d' ' -f1)
 disks="total $disks"
 
 disk_print_name(){
