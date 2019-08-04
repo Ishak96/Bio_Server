@@ -1,10 +1,10 @@
 #!/bin/bash
 interval=1
-repeat=20
+repeat=100
 zero=0
 
-disks=$(lsblk -io KNAME,TYPE | grep 'disk\|part'| sed -e "s/  */ /g" | cut -d' ' -f1)
-disks="total $disks"
+disks=$(lsblk -io KNAME,TYPE | grep 'disk'| sed -e "s/  */ /g" | cut -d' ' -f1)
+disks="total $disks loop"
 
 disk_print_name(){
 	currentDate=$(date "+%H:%M:%S")
@@ -14,9 +14,7 @@ disk_print_name(){
 	d="t "
 	for disk in $disks
 	do
-		d_tmp=$(echo "$disk" | cut -d'/' -f3)
-
-		d="$d $d_tmp"
+		d="$d $disk"
 	done
 
 	echo $d >> ../plot/disk_usage.dat
@@ -32,11 +30,17 @@ function d_u(){
 
 		for disk in $disks
 		do
-			d_tmp=$(echo "$disk" | cut -d'/' -f3)
+			usage_d=$(df --total -hl | sed -e "s/  */ /g" | grep "$disk" | cut -d' ' -f5 | cut -d'%' -f1)
 
-			usage_d=$(df --total -hl | sed -e "s/  */ /g" | grep "$d_tmp" | cut -d' ' -f5 | cut -d'%' -f1)
-			
-			data_disk="$data_disk $usage_d"
+			tot=0
+			div=0
+			for value in $usage_d
+			do
+				tot=$(($tot + $value))
+				div=$(($div + 1))
+			done
+			moy=$(($tot / $div))
+			data_disk="$data_disk $moy"
 		done
 
 		echo $data_disk >> ../plot/disk_usage.dat
